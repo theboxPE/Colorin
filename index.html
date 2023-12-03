@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+        .colorAzul{
+            color: blue;
+            background-color: lightblue;
+        }
+
+        .colorRojo{
+            color: red;
+            background-color: pink;
+        }
+
+        .colorVerde{
+            color: green;
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="divEscenario">
+
+    </div>
+
+    <br/>
+    <div>
+        Azules <span id="lbl_blue">0</span>
+        Rojos <span id="lbl_red">0</span>
+        Verdes <span id="lbl_green">0</span>
+    </div>
+
+    <br/>
+
+    <div class="text-center">
+        <button onclick="calcular()">Guardar Datos</button>
+        <button onclick="verDatosGuardados()">Ver Datos Guardados</button>
+    </div>
+   
+
+    <script>
+
+        window.onload = function(){
+
+            destino = document.getElementById('divEscenario')
+            for(var x = 1; x <= 25; x ++)
+            {
+                txt = document.createElement('input');
+                txt.setAttribute('class','txtDinamico');
+                txt.setAttribute('onkeyup', 'calcular()');
+                destino.appendChild(txt);
+
+                if(x % 5 == 0)
+                {
+                    br = document.createElement('br');
+                    destino.appendChild(br);
+                }
+            }
+
+        }
+
+        function calcular(){
+            cr = 0;
+            cg = 0;
+            cb = 0;
+
+            txts = document.getElementsByClassName('txtDinamico');
+
+            for(var x in txts){
+                if(txts[x].value != undefined){
+
+                    txts[x].setAttribute('class', 'txtDinamico');
+                    texto = txts[x].value;
+                    texto = texto.toLowerCase().trim();
+
+                    if(texto == 'rojo'){
+                        cr++;
+                        txts[x].setAttribute('class','txtDinamico colorRojo');
+                    }
+
+                    else if(texto == 'verde'){
+                        cg++;
+                        txts[x].setAttribute('class','txtDinamico colorVerde');
+                    }
+
+                    else if(texto == 'azul'){
+                        cb++;
+                        txts[x].setAttribute('class','txtDinamico colorAzul');
+                    }
+
+                    else{
+                        txts[x].setAttribute('class', 'txtDinamico');
+                    }
+                }
+            }
+
+            document.getElementById('lbl_blue').innerHTML = cb;
+            document.getElementById('lbl_red').innerHTML = cr;
+            document.getElementById('lbl_green').innerHTML = cg;
+
+            
+            var dataObject = {
+                blue: cb,
+                red: cr,
+                green: cg
+            };
+
+            
+            var jsonString = JSON.stringify(dataObject, null, 2);
+
+            
+            localStorage.setItem('Datax', jsonString);
+
+            
+        }
+
+        
+        function verDatosGuardados() {
+            var datosGuardados = localStorage.getItem('Datax');
+
+            if (datosGuardados) {
+                alert('Datos guardados:\n' + datosGuardados);
+            } else {
+                alert('No hay datos guardados.');
+            }
+        }
+
+    </script>
+    
+</body>
+</html>
